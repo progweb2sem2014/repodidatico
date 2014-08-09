@@ -16,10 +16,20 @@
         margin: 0px auto;
         border: 5px #1a222a solid;
     }
+    
+    h1 {
+        font-family: 'Droid Sans', arial;
+        font-weight: bold;
+        color: #fffaee;
+        font-size: 32px;
+        background-color: #1a222a;
+        padding: 5px;
+    }
 </style>
 </head>
     <body>
 
+    <h1>Breakout</h1>
     <!-- div que contem o jogo -->
     <div id="jogo"></div>
         
@@ -135,15 +145,19 @@
                     bola.scale.setTo(1,1);
                     game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
                 }
-                if (bola.y > 470) {
-                    bola.destroy (true);
-                    gameoverMsg.text = 'Game over!';
-                    bola.exist = false;
+                if (bola.y > 460) {
                     fimDeJogo = true;
+                    gameoverMsg.text = 'Você perdeu!';
+                }
+                
+                if (blocos.length == 0) {
+                    fimDeJogo = true;
+                    gameoverMsg.text = 'Você venceu!';
                 }
                 
                 // se for fim de jogo, recomecar
                 if (fimDeJogo) {
+                    bola.destroy();
                     if(confirmar.isDown) {
                         velocidadeBola = 100;
                         game.state.restart();
@@ -157,7 +171,7 @@
             
             function colisaoBolaBloco (pBola, pBloco) {
                 console.log ('bola tocou em ' + pBloco.name);
-                velocidadeBola += 5;
+                velocidadeBola += 2;
                 pBloco.destroy (true);
                 bola.scale.setTo(1,1);
                 game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
