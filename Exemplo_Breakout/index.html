@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Breakout</title>
+<script src="js/phaser.min.js"></script>
+<style>
+    body {
+        width : 650px;
+        margin: 20px auto;
+        background-color: #194e5c;
+        text-align: center;
+    }
+    #jogo  {
+        text-align: center;
+        margin: 0px auto;
+        border: 5px #1a222a solid;
+    }
+</style>
+</head>
+    <body>
+
+    <!-- div que contem o jogo -->
+    <div id="jogo"></div>
+        
+    <script type="text/javascript"> 
+        window.onload = function () {
+            //set up Phaser canvas with width = 300 and height = 600 
+            var game = new Phaser.Game (640, 480, Phaser.AUTO, 'jogo', { preload: preload, create: create, update: update, render: render }); 
+            
+            var velocidadeJogador = 1000,
+                velocidadeBola = 100;
+            
+            var jogador,
+                direcionais,
+                tiposBlocos,
+                blocos,
+                bola,
+                gameoverMsg,
+                fimDeJogo,
+                confirmar;
+            
+            // pré-carrega todos os assets necessarios
+           function preload () {
+                // imagem do paddle
+                game.load.image ('paddle', 'assets/paddle.png');
+                // imagens de blocos
+                game.load.image ('bloco1', 'assets/bloco1.png');   
+                game.load.image ('bloco2', 'assets/bloco2.png');
+                game.load.image ('bloco3', 'assets/bloco3.png');
+                game.load.image ('bloco4', 'assets/bloco4.png');
+                tiposBlocos = ['bloco1','bloco2','bloco3','bloco4'];
+                // bola
+                game.load.image ('bola', 'assets/bola.png');
+            }
+            
+            function create () {
+                fimDeJogo = false;
+                // ativa o sistema de fisica arcade
+                game.physics.startSystem (Phaser.Physics.ARCADE);
+                // fundo do palco
+                game.stage.backgroundColor = '#fffaee';
+                
+                // jogador
+                jogador = game.add.sprite (320, 420, 'paddle');
+                game.physics.arcade.enable (jogador);
+                jogador.anchor.setTo(0.5, 0.5);
+                jogador.body.drag.x = 300;
+                jogador.body.maxVelocity.x = 300;
+                jogador.body.collideWorldBounds = true;
+                jogador.body.immovable = true;
+                
+                // inputs do jogador
+                direcionais = game.input.keyboard.createCursorKeys();
+                
+                // blocos
+                blocos = game.add.group();
+                for (var l = 0; l < 5; l++) {
+                    for (var c = 0; c < 7; c++) {
+                        var ind = game.rnd.integerInRange(0, tiposBlocos.length - 1);
+                        var bloco = blocos.create (45 + c * 80, 30 + l * 50, tiposBlocos[ind]);
+                        bloco.name = 'b' + c + 'x' + l;
+                    }
+                }
+                blocos.enableBody = true;
+                blocos.physicsBodyType = Phaser.Physics.ARCADE;
+                game.physics.arcade.enable (blocos);
+                blocos.setAll('body.immovable', true);
+                
+                // bola
+                bola = game.add.sprite (320, 350, 'bola');
+                game.physics.arcade.enable (bola);
+                bola.anchor.setTo(0.5, 0.5);
+                bola.body.maxVelocity.x = 300;
+                bola.body.collideWorldBounds = true;
+                bola.body.velocity = new Phaser.Point (velocidadeBola, -velocidadeBola);
+                bola.body.bounce.setTo(1,1);
+                
+                // msg de fim de jogo
+                var estilo = { font: "72px Droid Sans", fill: "#194e5c", align: "center", fontWeight: '900', stroke:'#1a222a', strokeThickness: 5 };
+                gameoverMsg = game.add.text(game.world.centerX, game.world.centerY-50, '', estilo);
+                gameoverMsg.anchor.setTo(0.5);
+                
+                // botao
+                confirmar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            }
+            
+            function update () {
+                // configura colisoes
+                game.physics.arcade.collide (jogador, bola, colisaoJogadorBola, null, this);
+                game.physics.arcade.collide (bola, blocos, colisaoBolaBloco, null, this);
+                
+                // movimento lateral do jogador
+                jogador.body.acceleration.x = 0;
+                if (direcionais.left.isDown) {
+                    jogador.body.acceleration.x = -velocidadeJogador;
+                }
+                if (direcionais.right.isDown) {
+                    jogador.body.acceleration.x = velocidadeJogador;
+                }
+                
+                // limites externos da bola
+                if (bola.x > 630) {
+                    bola.body.velocity.x = -velocidadeBola;
+                    bola.scale.setTo(1,1);
+                    game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+                }
+                if (bola.x < 10) {
+                    bola.body.velocity.x = velocidadeBola;
+                    bola.scale.setTo(1,1);
+                    game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+                }
+                if (bola.y < 10) {
+                    bola.body.velocity.y = velocidadeBola;
+                    bola.scale.setTo(1,1);
+                    game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+                }
+                if (bola.y > 470) {
+                    bola.destroy (true);
+                    gameoverMsg.text = 'Game over!';
+                    bola.exist = false;
+                    fimDeJogo = true;
+                }
+                
+                // se for fim de jogo, recomecar
+                if (fimDeJogo) {
+                    if(confirmar.isDown) {
+                        velocidadeBola = 100;
+                        game.state.restart();
+                    }
+                }
+            }
+            
+            function render () {
+                //game.debug.bodyInfo(bola, 16, 24);
+            }
+            
+            function colisaoBolaBloco (pBola, pBloco) {
+                console.log ('bola tocou em ' + pBloco.name);
+                velocidadeBola += 5;
+                pBloco.destroy (true);
+                bola.scale.setTo(1,1);
+                game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+            }
+            
+            function colisaoJogadorBola () {
+                console.log ('bola tocou no jogador');
+                if (bola.body.velocity.x > 0 && bola.x < jogador.x) {
+                    bola.body.velocity.x = -velocidadeBola;
+                }
+                if (bola.body.velocity.x < 0 && bola.x > jogador.x) {
+                    bola.body.velocity.x = velocidadeBola;
+                }
+                console.log(bola);
+                //bola.scale.setTo(1.5, 1.5);
+                game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+            }
+        };
+    </script>
+    </body>
+</html>
