@@ -48,7 +48,10 @@
                 bola,
                 gameoverMsg,
                 fimDeJogo,
-                confirmar;
+                confirmar,
+                sfxParede,
+                sfxBloco,
+                sfxJogador;
             
             // pré-carrega todos os assets necessarios
            function preload () {
@@ -62,9 +65,18 @@
                 tiposBlocos = ['bloco1','bloco2','bloco3','bloco4'];
                 // bola
                 game.load.image ('bola', 'assets/bola.png');
+                // audio
+                game.load.audio ('parede', 'assets/Colisao_1.ogg');
+                game.load.audio ('bloco', 'assets/Colisao_2.ogg');
+                game.load.audio ('jogador', 'assets/Colisao_3.ogg');
             }
             
             function create () {
+                // audio
+                sfxParede = game.add.audio('parede');
+                sfxBloco = game.add.audio('bloco');
+                sfxJogador = game.add.audio('jogador');
+                
                 fimDeJogo = false;
                 // ativa o sistema de fisica arcade
                 game.physics.startSystem (Phaser.Physics.ARCADE);
@@ -134,16 +146,19 @@
                     bola.body.velocity.x = -velocidadeBola;
                     bola.scale.setTo(1,1);
                     game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+                    sfxParede.play ();
                 }
                 if (bola.x < 10) {
                     bola.body.velocity.x = velocidadeBola;
                     bola.scale.setTo(1,1);
                     game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+                    sfxParede.play ();
                 }
                 if (bola.y < 10) {
                     bola.body.velocity.y = velocidadeBola;
                     bola.scale.setTo(1,1);
                     game.add.tween(bola.scale).to({y : 2, x: 2}, 100, Phaser.Easing.Cubic.Out, true, 0, 0, true);
+                    sfxParede.play ();
                 }
                 if (bola.y > 460) {
                     fimDeJogo = true;
@@ -171,6 +186,7 @@
             
             function colisaoBolaBloco (pBola, pBloco) {
                 console.log ('bola tocou em ' + pBloco.name);
+                sfxBloco.play ();
                 velocidadeBola += 2;
                 pBloco.destroy (true);
                 bola.scale.setTo(1,1);
@@ -179,6 +195,7 @@
             
             function colisaoJogadorBola () {
                 console.log ('bola tocou no jogador');
+                sfxJogador.play ();
                 if (bola.body.velocity.x > 0 && bola.x < jogador.x) {
                     bola.body.velocity.x = -velocidadeBola;
                 }
