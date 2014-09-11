@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>a_pescaria.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>a_pescaria.js</h1>
+        
+
+        
+      </div>
+
+      
+        
+        <p>Criamos um objeto <code>Game</code>, definindo, em ordem, <em>largura</em>, <em>altura</em>, <em>modo de renderização</em>, <em>id do html</em>, <em>estado inicial</em>, <em>transparência</em> e <em>antialias</em>.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> jogo = <span class="hljs-keyword">new</span> Phaser.Game (
+    <span class="hljs-number">400</span>, 
+    <span class="hljs-number">600</span>, 
+    Phaser.AUTO, 
+    <span class="hljs-string">'jogo'</span>, 
+    <span class="hljs-literal">null</span>, 
+    <span class="hljs-literal">false</span>, 
+    <span class="hljs-literal">false</span>);</pre></div>
+        
+      
+        
+        <h2 id="definindo-vari-veis-globais">Definindo variáveis globais</h2>
+<p>Para que variáveis sejam acessíveis ao longo de vários estados ou funções, elas tem que ser declaradas no escopo global, ou seja, fora de funções.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> controleJ1, 
+    controleJ2,
+    scoreJ1,
+    scoreJ2;</pre></div>
+        
+      
+        
+        <p>Inicializando algumas variáveis de gameplay.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> gravidade = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">var</span> velocidadeAnzolY = <span class="hljs-number">400</span>;
+<span class="hljs-keyword">var</span> velocidadeAnzolX = <span class="hljs-number">400</span>;
+<span class="hljs-keyword">var</span> arrasto = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">var</span> velocidadeMaxX = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">var</span> velocidadeMaxY = <span class="hljs-number">100</span>;</pre></div>
+        
+      
+        
+        <h2 id="criando-estados">Criando estados</h2>
+<p>Aqui, estamos criando um <code>State</code>. Normalmente, as três funções principais <code>preload</code>, <code>create</code> e <code>update</code> são definidas e associadas a propriedades do objeto <code>State.prototype</code>.</p>
+
+        
+      
+        
+        <h3 id="estado-menu-inicial">Estado: Menu inicial</h3>
+<p>Aqui criamos o estado para o menu inicial do jogo. Como esse será o primeiro estado carregado pelo jogo (o que é definido mais a frente no código), vamos aproveitar e já cerrgar todos os arquivos necessários neste <code>preload</code>, para não termos que nos preocuparmos mais com isso.</p>
+
+        
+          <div class='highlight'><pre>
+<span class="hljs-keyword">var</span> MenuInicial = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(jogo)</span> </span>{};
+MenuInicial.prototype = {</pre></div>
+        
+      
+        
+        <p>A função <code>preload</code> carrega arquivos externos necessários para o estado rodar corretamente.</p>
+
+        
+          <div class='highlight'><pre>    preload: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
+        
+      
+        
+        <p>É importante que a referência ao arquivo esteja correta. Para isso, temos que seguir a hierarquia das nossas pastas.</p>
+
+        
+          <div class='highlight'><pre>        jogo.load.image(<span class="hljs-string">'menu_fundo'</span>, <span class="hljs-string">'../Assets/fundo_menu.jpg'</span>);
+        jogo.load.image(<span class="hljs-string">'fundo_papel'</span>, <span class="hljs-string">'../Assets/fundo_papel.jpg'</span>);
+        jogo.load.image(<span class="hljs-string">'J1'</span>, <span class="hljs-string">'../Assets/J1.png'</span>);
+        jogo.load.image(<span class="hljs-string">'J2'</span>, <span class="hljs-string">'../Assets/J2.png'</span>);
+        jogo.load.image(<span class="hljs-string">'agua'</span>, <span class="hljs-string">'../Assets/agua.png'</span>);
+        jogo.load.image(<span class="hljs-string">'anzol_J1'</span>, <span class="hljs-string">'../Assets/anzol_J1.png'</span>);
+        jogo.load.image(<span class="hljs-string">'anzol_J2'</span>, <span class="hljs-string">'../Assets/anzol_J2.png'</span>);
+    }, <span class="hljs-comment">// fim: preload</span></pre></div>
+        
+      
+        
+        <p>A função <code>create</code> define operações executadas uma única vez no começo da execução do estado.</p>
+
+        
+          <div class='highlight'><pre>    create: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
+        
+      
+        
+        <p>Criar um sprite e adicioná-lo ao estado.</p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'menu_fundo'</span>);</pre></div>
+        
+      
+        
+        <p>Também inicializamos os dois objetos globais pra guardar input de jogadores. Assim, podemos usar esses objetos e suas definições em todos os estados do jogo.</p>
+
+        
+          <div class='highlight'><pre>        controleJ1 = {
+            cima: jogo.input.keyboard.addKey (Phaser.Keyboard.W),
+            baixo: jogo.input.keyboard.addKey (Phaser.Keyboard.S),
+            esquerda: jogo.input.keyboard.addKey (Phaser.Keyboard.A),
+            direita: jogo.input.keyboard.addKey (Phaser.Keyboard.D),
+            acao: jogo.input.keyboard.addKey (Phaser.Keyboard.SPACEBAR)
+        };
+        
+        controleJ2 = {
+            cima: jogo.input.keyboard.addKey (Phaser.Keyboard.UP),
+            baixo: jogo.input.keyboard.addKey (Phaser.Keyboard.DOWN),
+            esquerda: jogo.input.keyboard.addKey (Phaser.Keyboard.LEFT),
+            direita: jogo.input.keyboard.addKey (Phaser.Keyboard.RIGHT),
+            acao: jogo.input.keyboard.addKey (Phaser.Keyboard.ENTER)
+        };
+    }, <span class="hljs-comment">// fim: create</span></pre></div>
+        
+      
+        
+        <p>Durante a função <code>update</code>, vamos apenas checar se alguma das teclas de ação foi pressionada.</p>
+
+        
+          <div class='highlight'><pre>    update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (controleJ1.acao.justPressed (<span class="hljs-number">5</span>) || controleJ2.acao.justPressed (<span class="hljs-number">5</span>)) {</pre></div>
+        
+      
+        
+        <p>Então, começamos a partida, indo para o próximo estado.</p>
+
+        
+          <div class='highlight'><pre>            jogo.state.start(<span class="hljs-string">'Pescaria'</span>, Pescaria);
+        }
+    } <span class="hljs-comment">// fim: update</span>
+}</pre></div>
+        
+      
+        
+        <h3 id="estado-pescaria">Estado: Pescaria</h3>
+<p>Neste estado é que o jogo “acontece”. Aqui tratamos de inputs, scores, movimentos.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> Pescaria = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(jogo)</span> </span>{
+    <span class="hljs-keyword">var</span> anzolJ1,
+        anxolJ2,
+        imgJ1,
+        imgj2,
+        topoAgua;
+};
+
+Pescaria.prototype = {</pre></div>
+        
+      
+        
+        <h4 id="create">Create</h4>
+<p>Na função de inicialização criamos a situação inicial do jogo, assim como definimos os objetos já presentes.</p>
+
+        
+          <div class='highlight'><pre>    create: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
+        
+      
+        
+        <p>Carregamos imagens e criamos variáveis para guardá-las.</p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'fundo_papel'</span>);</pre></div>
+        
+      
+        
+        <p>Adiciona a imagem da água, usando um modo de mesclagem chamado <code>MULTIPLY</code>, que determina como uma imagem se relaciona com outra. Pense em camadas de Photoshop. </p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-keyword">var</span> agua1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
+        agua1.blendMode = PIXI.blendModes.MULTIPLY;</pre></div>
+        
+      
+        
+        <p>Aqui adicionamos as imagens dos dois jogadores. Também usamos o modo <code>MULTIPLY</code>.</p>
+
+        
+          <div class='highlight'><pre>        imgJ1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'J1'</span>);
+        imgJ1.blendMode = PIXI.blendModes.MULTIPLY;
+        imgJ2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'J2'</span>);
+        imgJ2.blendMode = PIXI.blendModes.MULTIPLY;</pre></div>
+        
+      
+        
+        <p>Uma segunda camada de água, para que fique mais escura.</p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-keyword">var</span> agua2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
+        agua2.blendMode = PIXI.blendModes.MULTIPLY;</pre></div>
+        
+      
+        
+        <p>Criação de um anzol. Esse é um processo em vários passos. Primeiro, criamos um sprite e definimos seu centro.</p>
+
+        
+          <div class='highlight'><pre>        anzolJ1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">50</span>, <span class="hljs-number">400</span>, <span class="hljs-string">'anzol_J1'</span>);
+        anzolJ1.anchor.setTo(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>);</pre></div>
+        
+      
+        
+        <p>Depois, o sistema de física é habilitado, e uma série de configurações é feita. Em ordem: 1) mudar o tamanho do objeto físico, 2) criar gravidade, 3) ativar colisões com as bordas do mundo, 4) criar arrasto, 5) definir velocidade máxima.</p>
+
+        
+          <div class='highlight'><pre>        jogo.physics.enable(anzolJ1, Phaser.Physics.ARCADE);
+        anzolJ1.body.setSize(<span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">8</span>, <span class="hljs-number">16</span>);
+        anzolJ1.body.gravity.setTo(<span class="hljs-number">0</span>, gravidade);
+        anzolJ1.body.collideWorldBounds = <span class="hljs-literal">true</span>;
+        anzolJ1.body.drag.setTo(arrasto, arrasto);
+        anzolJ1.body.maxVelocity.setTo(velocidadeMaxX, velocidadeMaxY);</pre></div>
+        
+      
+        
+        <p>Aqui as mesmas configurações são feitas pro segundo anzol.</p>
+
+        
+          <div class='highlight'><pre>        anzolJ2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">350</span>, <span class="hljs-number">400</span>, <span class="hljs-string">'anzol_J2'</span>);
+        anzolJ2.anchor.setTo(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>);
+        jogo.physics.enable(anzolJ2, Phaser.Physics.ARCADE);
+        anzolJ2.body.setSize(<span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">0</span>, <span class="hljs-number">16</span>);
+        anzolJ2.body.gravity.setTo(<span class="hljs-number">0</span>, gravidade);
+        anzolJ2.body.collideWorldBounds = <span class="hljs-literal">true</span>;
+        anzolJ2.body.drag.setTo(arrasto, arrasto);
+        anzolJ2.body.maxVelocity.setTo(velocidadeMaxX, velocidadeMaxY);</pre></div>
+        
+      
+        
+        <p>Este é um objeto invisível, usado apenas para servir como um <em>trigger</em>, ou seja, um sensor para quando os anzóis tentam sair da água. Mais adiante, vamos usar esse objeto para limitar movimentos e para saber quando o pescador acabou de pegar um peixe.</p>
+
+        
+          <div class='highlight'><pre>        topoAgua = <span class="hljs-keyword">this</span>.add.sprite (<span class="hljs-number">0</span>, <span class="hljs-number">230</span>);
+        jogo.physics.enable(topoAgua, Phaser.Physics.ARCADE);
+        topoAgua.body.setSize(<span class="hljs-number">400</span>, <span class="hljs-number">20</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+        topoAgua.body.gravity.setTo(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+        topoAgua.body.immovable = <span class="hljs-literal">true</span>;</pre></div>
+        
+      
+        
+        <p>Zerando as pontuações.</p>
+
+        
+          <div class='highlight'><pre>        scoreJ1 = scoreJ2 = <span class="hljs-number">0</span>;</pre></div>
+        
+      
+        
+        <p>Cria um contexto de bitmap para desenhar linhas e adiciona ao jogo</p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.bitmap = <span class="hljs-keyword">this</span>.game.add.bitmapData(<span class="hljs-keyword">this</span>.game.width, <span class="hljs-keyword">this</span>.game.height);
+        <span class="hljs-keyword">this</span>.bitmap.context.lineWidth = <span class="hljs-number">3</span>;
+        <span class="hljs-keyword">this</span>.game.add.image(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.bitmap);
+    }, <span class="hljs-comment">// fim: create</span></pre></div>
+        
+      
+        
+        <h4 id="update">Update</h4>
+<p>Aqui definimos o fluxo do jogo a cada frame</p>
+
+        
+          <div class='highlight'><pre>    update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">/*jogo.debug.body(topoAgua);*/</span></pre></div>
+        
+      
+        
+        <p>Tramaento de inputs e movimento. Mais detalhes na última seção.</p>
+
+        
+          <div class='highlight'><pre>        TratarInput(controleJ1, anzolJ1);
+        TratarInput(controleJ2, anzolJ2);</pre></div>
+        
+      
+        
+        <p>Define colisões entre objetos e grupos de objetos</p>
+
+        
+          <div class='highlight'><pre>        jogo.physics.arcade.collide(anzolJ1, topoAgua);
+        jogo.physics.arcade.collide(anzolJ2, topoAgua);
+    }, <span class="hljs-comment">// fim: update</span></pre></div>
+        
+      
+        
+        <p>Na função <code>render</code> podemos desenhar coisas depois que a função <code>update</code> de todos os objetos foram chamadas. Isso é útil para garantir que as novas posições dos objetos já foram calculadas.</p>
+
+        
+          <div class='highlight'><pre>    render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
+        
+      
+        
+        <p>Limpa o contexto de desenho de primitivas.</p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.bitmap.clear();
+        DesenharLinha (<span class="hljs-keyword">this</span>.bitmap.context, <span class="hljs-string">'rgb(154, 85, 166)'</span>, <span class="hljs-number">184</span>, <span class="hljs-number">65</span>, anzolJ1.x + <span class="hljs-number">2</span>, anzolJ1.y + <span class="hljs-number">2</span> );
+        DesenharLinha (<span class="hljs-keyword">this</span>.bitmap.context, <span class="hljs-string">'rgb(213, 188, 71)'</span>, <span class="hljs-number">216</span>, <span class="hljs-number">65</span>, anzolJ2.x + <span class="hljs-number">2</span>, anzolJ2.y + <span class="hljs-number">2</span>);
+    } <span class="hljs-comment">// fim: render</span>
+}</pre></div>
+        
+      
+        
+        <h2 id="rodando-estados">Rodando estados</h2>
+<p>Agora que criamos alguns estados, podemos dar chaves para eles (<code>state.add</code>) e escolher um para executar (<code>state.start</code>).</p>
+
+        
+          <div class='highlight'><pre>jogo.state.add(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);
+jogo.state.add(<span class="hljs-string">'Pescaria'</span>, Pescaria);
+jogo.state.start(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);</pre></div>
+        
+      
+        
+        <h2 id="fun-es">Funções</h2>
+<p>Aqui estão funções utilizadas em outros pontos do código. O objetivo de definir essas funções em separado é poder reutilizá-las sem maiores esforços e repetições.</p>
+
+        
+      
+        
+        <h3 id="desenhar-linha">Desenhar Linha</h3>
+<p>Desenha a linha de um jogador, criando um desenho vetorial (<em>path</em>) diretamente no elemento canvas.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DesenharLinha</span> <span class="hljs-params">(contexto, cor, origemX, origemY, fimX, fimY)</span> </span>{
+    contexto.beginPath();
+    contexto.strokeStyle = cor;
+    contexto.moveTo(origemX, origemY);
+    contexto.lineTo(fimX, fimY);
+    contexto.stroke();
+    contexto.closePath();
+} <span class="hljs-comment">// fim: DesenharLinha</span></pre></div>
+        
+      
+        
+        <h3 id="tratar-input">Tratar Input</h3>
+<p>Checa as diferentes possibilidades de input de um jogador e altera o movimento do respectivo anzol.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">TratarInput</span> <span class="hljs-params">(jogador, anzol)</span> </span>{</pre></div>
+        
+      
+        
+        <p>A cada frame, zera a aceleração e depois cria novos valores de acordo com as teclas apertadas.</p>
+
+        
+          <div class='highlight'><pre>    anzol.body.acceleration.setTo (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">if</span>(jogador.cima.isDown){
+        anzol.body.acceleration.y = -velocidadeAnzolY;
+    }
+    <span class="hljs-keyword">if</span>(jogador.baixo.isDown){
+        anzol.body.acceleration.y = velocidadeAnzolY;
+    }
+    <span class="hljs-keyword">if</span>(jogador.esquerda.isDown){
+        anzol.body.acceleration.x = -velocidadeAnzolX;
+    }
+    <span class="hljs-keyword">if</span>(jogador.direita.isDown){
+        anzol.body.acceleration.x = velocidadeAnzolX;
+    }</pre></div>
+        
+      
+        
+        <p>Caso a tecla de ação estiver apertada e o jogador estiver movendo-se para cima, deixamos ele subir mais rápido.</p>
+
+        
+          <div class='highlight'><pre>    anzol.body.maxVelocity.y = velocidadeMaxY;
+    <span class="hljs-keyword">if</span>(jogador.acao.isDown &amp;&amp; anzol.body.velocity.y &lt; <span class="hljs-number">0</span>){
+        anzol.body.maxVelocity.y = velocidadeMaxY * <span class="hljs-number">4</span>;
+    }
+} <span class="hljs-comment">// fim: TratarInput</span></pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

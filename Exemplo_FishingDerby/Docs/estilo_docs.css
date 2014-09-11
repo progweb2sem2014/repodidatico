@@ -69,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
   font-family: "novecento-bold";
   text-transform: uppercase;
-  margin: 0px 0 15px 0;
+  margin: 15px 0 15px 0;
 }
 
 h1 {
@@ -200,8 +200,14 @@ ul.sections > li > div {
 }
 
 /*---------------------- Low resolutions (> 320px) ---------------------*/
-@media only screen and (min-width: 320px) {
+@media only screen /*and (min-width: 320px)*/ {
   .pilwrap { display: none; }
+    
+  body { 
+      max-width: 600px; 
+      font-size: 16px;
+      margin: 0 auto;
+  }
 
   ul.sections > li > div {
     display: block;
@@ -234,7 +240,12 @@ ul.sections > li > div {
   }
 }
 
+.sections ul {
+  margin: 10px 0 0 0;
+}
+
 /*----------------------  (> 481px) ---------------------*/
+/*
 @media only screen and (min-width: 481px) {
   #container {
     position: relative;
@@ -346,6 +357,7 @@ ul.sections > li > div {
 }
 
 /*---------------------- (> 1025px) ---------------------*/
+/*
 @media only screen and (min-width: 1025px) {
 
   body {
@@ -376,10 +388,19 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 */
 
+.content {
+    background-color: hsl(48, 20%, 98%);
+}
+
+pre {
+    font-size:14px !important;
+    line-height: 18px;
+}
+
 pre code {
   display: block; padding: 0.5em;
   color: #000;
-  background: #f8f8ff
+  background: #f8f8ff;
 }
 
 pre .hljs-comment,
@@ -505,6 +526,4 @@ pre .hljs-tex .hljs-formula {
   opacity: 0.5;
 }
 
-.sections ul {
-  margin: 10px 0 0 0;
-}
+
