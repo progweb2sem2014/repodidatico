@@ -4,115 +4,262 @@
 <head>
   <title>a_pescaria.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="page">
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>a_pescaria.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>Criamos um objeto <code>Game</code>, definindo, em ordem, <em>largura</em>, <em>altura</em>, <em>modo de renderização</em>, <em>id do html</em>, <em>estado inicial</em>, <em>transparência</em> e <em>antialias</em>.</p>
 
-      <div class="header">
-        
-          <h1>a_pescaria.js</h1>
-        
-
-        
-      </div>
-
-      
-        
-        <p>Criamos um objeto <code>Game</code>, definindo, em ordem, <em>largura</em>, <em>altura</em>, <em>modo de renderização</em>, <em>id do html</em>, <em>estado inicial</em>, <em>transparência</em> e <em>antialias</em>.</p>
-
-        
-          <div class='highlight'><pre><span class="hljs-keyword">var</span> jogo = <span class="hljs-keyword">new</span> Phaser.Game (
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> jogo = <span class="hljs-keyword">new</span> Phaser.Game (
     <span class="hljs-number">400</span>, 
     <span class="hljs-number">600</span>, 
     Phaser.AUTO, 
     <span class="hljs-string">'jogo'</span>, 
     <span class="hljs-literal">null</span>, 
     <span class="hljs-literal">false</span>, 
-    <span class="hljs-literal">false</span>);</pre></div>
+    <span class="hljs-literal">false</span>);</pre></div></div>
+            
+        </li>
         
-      
         
-        <h2 id="definindo-vari-veis-globais">Definindo variáveis globais</h2>
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p> Objeto para carregar fontes do Google Fonts. Quando termianr de carregar vai chamar a função de criar textos passando duas mensagens como parâmetros.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>WebFontConfig = {
+    active: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{ jogo.time.events.add(Phaser.Timer.SECOND * <span class="hljs-number">0.1</span>, 
+        CriarTexto, <span class="hljs-keyword">this</span>, <span class="hljs-string">"a pescaria"</span>,
+        <span class="hljs-string">"      pesque 100kg de peixe\n[wasd + espaço | setas + enter]\n\n      música: incompetech"</span>); },
+    google: {
+      families: [<span class="hljs-string">'Homemade Apple'</span>]
+    }
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2 id="definindo-vari-veis-globais">Definindo variáveis globais</h2>
 <p>Para que variáveis sejam acessíveis ao longo de vários estados ou funções, elas tem que ser declaradas no escopo global, ou seja, fora de funções.</p>
 
-        
-          <div class='highlight'><pre><span class="hljs-keyword">var</span> controleJ1, 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> controleJ1, 
     controleJ2,
     scoreJ1,
-    scoreJ2;</pre></div>
+    scoreJ2,
+    txtJ1,
+    txtJ2,
+    musica;</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Inicializando algumas variáveis de gameplay.</p>
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Inicializando algumas variáveis de gameplay.</p>
 
-        
-          <div class='highlight'><pre><span class="hljs-keyword">var</span> gravidade = <span class="hljs-number">100</span>;
-<span class="hljs-keyword">var</span> velocidadeAnzolY = <span class="hljs-number">400</span>;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> gravidade = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">var</span> velocidadeAnzolY = <span class="hljs-number">200</span>;
 <span class="hljs-keyword">var</span> velocidadeAnzolX = <span class="hljs-number">400</span>;
-<span class="hljs-keyword">var</span> arrasto = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">var</span> arrasto = <span class="hljs-number">40</span>;
 <span class="hljs-keyword">var</span> velocidadeMaxX = <span class="hljs-number">100</span>;
-<span class="hljs-keyword">var</span> velocidadeMaxY = <span class="hljs-number">100</span>;</pre></div>
+<span class="hljs-keyword">var</span> velocidadeMaxY = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">var</span> velPeixe = <span class="hljs-number">50</span>;
+<span class="hljs-keyword">var</span> intervaloPeixePequeno = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">var</span> intervaloPeixeMedio = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">var</span> intervaloPeixeGrande = <span class="hljs-number">7</span>;
+<span class="hljs-keyword">var</span> maxPeixes = <span class="hljs-number">10</span>;</pre></div></div>
+            
+        </li>
         
-      
         
-        <h2 id="criando-estados">Criando estados</h2>
-<p>Aqui, estamos criando um <code>State</code>. Normalmente, as três funções principais <code>preload</code>, <code>create</code> e <code>update</code> são definidas e associadas a propriedades do objeto <code>State.prototype</code>.</p>
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2 id="criando-estados">Criando estados</h2>
+<p>Aqui, estamos criando um <code>State</code>. As três funções principais <code>preload</code>, <code>create</code> e <code>update</code> são definidas e associadas às respectivas propriedades do objeto <code>State.prototype</code>.</p>
 
+            </div>
+            
+        </li>
         
-      
         
-        <h3 id="estado-menu-inicial">Estado: Menu inicial</h3>
-<p>Aqui criamos o estado para o menu inicial do jogo. Como esse será o primeiro estado carregado pelo jogo (o que é definido mais a frente no código), vamos aproveitar e já cerrgar todos os arquivos necessários neste <code>preload</code>, para não termos que nos preocuparmos mais com isso.</p>
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h3 id="estado-menu-inicial">Estado: Menu inicial</h3>
+<p>Aqui criamos o estado para o menu inicial do jogo. Como esse será o primeiro estado carregado pelo jogo (o que é definido mais a frente no código), vamos aproveitar e já carregar todos os arquivos necessários neste <code>preload</code>, para não termos que nos preocuparmos mais com isso.</p>
 
-        
-          <div class='highlight'><pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
 <span class="hljs-keyword">var</span> MenuInicial = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(jogo)</span> </span>{};
-MenuInicial.prototype = {</pre></div>
+MenuInicial.prototype = {</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>A função <code>preload</code> carrega arquivos externos necessários para o estado rodar corretamente.</p>
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h4 id="menuinicial-preload-">MenuInicial.preload()</h4>
+<p>A função <code>preload</code> carrega arquivos externos necessários para o estado rodar corretamente.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    preload: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    preload: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
         
-      
-        
-        <p>É importante que a referência ao arquivo esteja correta. Para isso, temos que seguir a hierarquia das nossas pastas.</p>
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>É importante que a referência ao arquivo esteja correta. Para isso, temos que seguir a hierarquia das nossas pastas. Primeiro, carregamos imagens.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        jogo.load.image(<span class="hljs-string">'menu_fundo'</span>, <span class="hljs-string">'assets/fundo_menu.jpg'</span>);
+        jogo.load.image(<span class="hljs-string">'fundo_papel'</span>, <span class="hljs-string">'assets/fundo_papel.jpg'</span>);
+        jogo.load.image(<span class="hljs-string">'J1'</span>, <span class="hljs-string">'assets/J1.png'</span>);
+        jogo.load.image(<span class="hljs-string">'J2'</span>, <span class="hljs-string">'assets/J2.png'</span>);
+        jogo.load.image(<span class="hljs-string">'agua'</span>, <span class="hljs-string">'assets/agua.png'</span>);
+        jogo.load.image(<span class="hljs-string">'anzol_J1'</span>, <span class="hljs-string">'assets/anzol_J1.png'</span>);
+        jogo.load.image(<span class="hljs-string">'anzol_J2'</span>, <span class="hljs-string">'assets/anzol_J2.png'</span>);
+        jogo.load.image(<span class="hljs-string">'peixe_pequeno'</span>, <span class="hljs-string">'assets/peixe_pequeno.png'</span>);
+        jogo.load.image(<span class="hljs-string">'peixe_medio'</span>, <span class="hljs-string">'assets/peixe_medio.png'</span>);
+        jogo.load.image(<span class="hljs-string">'peixe_grande'</span>, <span class="hljs-string">'assets/peixe_grande.png'</span>);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        jogo.load.image(<span class="hljs-string">'menu_fundo'</span>, <span class="hljs-string">'../Assets/fundo_menu.jpg'</span>);
-        jogo.load.image(<span class="hljs-string">'fundo_papel'</span>, <span class="hljs-string">'../Assets/fundo_papel.jpg'</span>);
-        jogo.load.image(<span class="hljs-string">'J1'</span>, <span class="hljs-string">'../Assets/J1.png'</span>);
-        jogo.load.image(<span class="hljs-string">'J2'</span>, <span class="hljs-string">'../Assets/J2.png'</span>);
-        jogo.load.image(<span class="hljs-string">'agua'</span>, <span class="hljs-string">'../Assets/agua.png'</span>);
-        jogo.load.image(<span class="hljs-string">'anzol_J1'</span>, <span class="hljs-string">'../Assets/anzol_J1.png'</span>);
-        jogo.load.image(<span class="hljs-string">'anzol_J2'</span>, <span class="hljs-string">'../Assets/anzol_J2.png'</span>);
-    }, <span class="hljs-comment">// fim: preload</span></pre></div>
         
-      
-        
-        <p>A função <code>create</code> define operações executadas uma única vez no começo da execução do estado.</p>
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Depois, carregamos sons.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        jogo.load.audio(<span class="hljs-string">'trombou'</span>, <span class="hljs-string">'assets/trombou.ogg'</span>);
+        jogo.load.audio(<span class="hljs-string">'pegou_peixe'</span>, <span class="hljs-string">'assets/pegou_peixe.ogg'</span>);
+        jogo.load.audio(<span class="hljs-string">'fisgou_peixe'</span>, <span class="hljs-string">'assets/fisgou_peixe.ogg'</span>);
+        jogo.load.audio(<span class="hljs-string">'musica'</span>, <span class="hljs-string">'assets/Mellowtron_Incompetech.mp3'</span>);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    create: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
         
-      
-        
-        <p>Criar um sprite e adicioná-lo ao estado.</p>
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Essa última linha carrega a fonte do Google Font.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        jogo.load.script(<span class="hljs-string">'webfont'</span>, <span class="hljs-string">'https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js'</span>);
+    }, <span class="hljs-comment">// fim: preload</span></pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'menu_fundo'</span>);</pre></div>
         
-      
-        
-        <p>Também inicializamos os dois objetos globais pra guardar input de jogadores. Assim, podemos usar esses objetos e suas definições em todos os estados do jogo.</p>
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h4 id="menu-create-">Menu.create()</h4>
+<p>A função <code>create</code> define operações executadas uma única vez no começo da execução do estado.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    create: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        controleJ1 = {
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Criar um sprite neste estado.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'menu_fundo'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Também inicializamos os dois objetos globais pra guardar input de jogadores. Assim, podemos usar esses objetos e suas definições em todos os estados do jogo.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        controleJ1 = {
             cima: jogo.input.keyboard.addKey (Phaser.Keyboard.W),
             baixo: jogo.input.keyboard.addKey (Phaser.Keyboard.S),
             esquerda: jogo.input.keyboard.addKey (Phaser.Keyboard.A),
@@ -127,234 +274,620 @@ MenuInicial.prototype = {</pre></div>
             direita: jogo.input.keyboard.addKey (Phaser.Keyboard.RIGHT),
             acao: jogo.input.keyboard.addKey (Phaser.Keyboard.ENTER)
         };
-    }, <span class="hljs-comment">// fim: create</span></pre></div>
         
-      
+        <span class="hljs-keyword">if</span> (musica == <span class="hljs-literal">null</span>) {
+            musica = jogo.add.audio(<span class="hljs-string">'musica'</span>);
+            musica.play();
+        }
+    }, <span class="hljs-comment">// fim: create</span></pre></div></div>
+            
+        </li>
         
-        <p>Durante a função <code>update</code>, vamos apenas checar se alguma das teclas de ação foi pressionada.</p>
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h4 id="menuinicial-update-">MenuInicial.update()</h4>
+<p>Durante a função <code>update</code>, vamos apenas checar se alguma das teclas de ação foi pressionada.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (controleJ1.acao.justPressed (<span class="hljs-number">5</span>) || controleJ2.acao.justPressed (<span class="hljs-number">5</span>)) {</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        <span class="hljs-keyword">if</span> (controleJ1.acao.justPressed (<span class="hljs-number">5</span>) || controleJ2.acao.justPressed (<span class="hljs-number">5</span>)) {</pre></div>
         
-      
-        
-        <p>Então, começamos a partida, indo para o próximo estado.</p>
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Então, começamos a partida, indo para o próximo estado.</p>
 
-        
-          <div class='highlight'><pre>            jogo.state.start(<span class="hljs-string">'Pescaria'</span>, Pescaria);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            jogo.state.start(<span class="hljs-string">'Pescaria'</span>, Pescaria);
         }
     } <span class="hljs-comment">// fim: update</span>
-}</pre></div>
+}</pre></div></div>
+            
+        </li>
         
-      
         
-        <h3 id="estado-pescaria">Estado: Pescaria</h3>
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h3 id="estado-pescaria">Estado: Pescaria</h3>
 <p>Neste estado é que o jogo “acontece”. Aqui tratamos de inputs, scores, movimentos.</p>
 
-        
-          <div class='highlight'><pre><span class="hljs-keyword">var</span> Pescaria = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(jogo)</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Pescaria = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(jogo)</span> </span>{
     <span class="hljs-keyword">var</span> anzolJ1,
-        anxolJ2,
+        anzolJ2,
+        corJ1,
+        corJ2,
         imgJ1,
         imgj2,
-        topoAgua;
+        topoAgua,
+        peixes,
+        somFisgou,
+        somPegou,
+        somTrombou;
 };
 
-Pescaria.prototype = {</pre></div>
+Pescaria.prototype = {</pre></div></div>
+            
+        </li>
         
-      
         
-        <h4 id="create">Create</h4>
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h4 id="pescaria-create-">Pescaria.create()</h4>
 <p>Na função de inicialização criamos a situação inicial do jogo, assim como definimos os objetos já presentes.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    create: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    create: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
         
-      
-        
-        <p>Carregamos imagens e criamos variáveis para guardá-las.</p>
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Carregamos imagens e criamos variáveis para guardá-las.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'fundo_papel'</span>);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'fundo_papel'</span>);</pre></div>
         
-      
-        
-        <p>Adiciona a imagem da água, usando um modo de mesclagem chamado <code>MULTIPLY</code>, que determina como uma imagem se relaciona com outra. Pense em camadas de Photoshop. </p>
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Adiciona a imagem da água, usando um modo de mesclagem chamado <code>MULTIPLY</code>, que determina como uma imagem se relaciona com outra. Pense em camadas de Photoshop. </p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> agua1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
+        agua1.blendMode = PIXI.blendModes.MULTIPLY;</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        <span class="hljs-keyword">var</span> agua1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
-        agua1.blendMode = PIXI.blendModes.MULTIPLY;</pre></div>
         
-      
-        
-        <p>Aqui adicionamos as imagens dos dois jogadores. Também usamos o modo <code>MULTIPLY</code>.</p>
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Aqui adicionamos as imagens dos dois jogadores. Também usamos o modo <code>MULTIPLY</code>.</p>
 
-        
-          <div class='highlight'><pre>        imgJ1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'J1'</span>);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        imgJ1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'J1'</span>);
         imgJ1.blendMode = PIXI.blendModes.MULTIPLY;
         imgJ2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'J2'</span>);
-        imgJ2.blendMode = PIXI.blendModes.MULTIPLY;</pre></div>
+        imgJ2.blendMode = PIXI.blendModes.MULTIPLY;</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Uma segunda camada de água, para que fique mais escura.</p>
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Uma segunda camada de água, para que fique mais escura.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> agua2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
+        agua2.blendMode = PIXI.blendModes.MULTIPLY;</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        <span class="hljs-keyword">var</span> agua2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
-        agua2.blendMode = PIXI.blendModes.MULTIPLY;</pre></div>
         
-      
-        
-        <p>Criação de um anzol. Esse é um processo em vários passos. Primeiro, criamos um sprite e definimos seu centro.</p>
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Criação de um anzol. Esse é um processo em vários passos. Primeiro, criamos um sprite e definimos seu centro.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        anzolJ1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">50</span>, <span class="hljs-number">400</span>, <span class="hljs-string">'anzol_J1'</span>);
+        anzolJ1.anchor.setTo(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>);
+        corJ1 = <span class="hljs-number">0x9a55a6</span>;</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        anzolJ1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">50</span>, <span class="hljs-number">400</span>, <span class="hljs-string">'anzol_J1'</span>);
-        anzolJ1.anchor.setTo(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>);</pre></div>
         
-      
-        
-        <p>Depois, o sistema de física é habilitado, e uma série de configurações é feita. Em ordem: 1) mudar o tamanho do objeto físico, 2) criar gravidade, 3) ativar colisões com as bordas do mundo, 4) criar arrasto, 5) definir velocidade máxima.</p>
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Depois, o sistema de física é habilitado, e uma série de configurações é feita. Em ordem: 1) mudar o tamanho do objeto físico, 2) criar gravidade, 3) ativar colisões com as bordas do mundo, 4) criar arrasto, 5) definir velocidade máxima.</p>
 
-        
-          <div class='highlight'><pre>        jogo.physics.enable(anzolJ1, Phaser.Physics.ARCADE);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        jogo.physics.enable(anzolJ1, Phaser.Physics.ARCADE);
         anzolJ1.body.setSize(<span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">8</span>, <span class="hljs-number">16</span>);
         anzolJ1.body.gravity.setTo(<span class="hljs-number">0</span>, gravidade);
         anzolJ1.body.collideWorldBounds = <span class="hljs-literal">true</span>;
         anzolJ1.body.drag.setTo(arrasto, arrasto);
-        anzolJ1.body.maxVelocity.setTo(velocidadeMaxX, velocidadeMaxY);</pre></div>
+        anzolJ1.body.maxVelocity.setTo(velocidadeMaxX, velocidadeMaxY);</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Aqui as mesmas configurações são feitas pro segundo anzol.</p>
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Aqui as mesmas configurações são feitas pro segundo anzol.</p>
 
-        
-          <div class='highlight'><pre>        anzolJ2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">350</span>, <span class="hljs-number">400</span>, <span class="hljs-string">'anzol_J2'</span>);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        anzolJ2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">350</span>, <span class="hljs-number">400</span>, <span class="hljs-string">'anzol_J2'</span>);
         anzolJ2.anchor.setTo(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>);
+        corJ2 = <span class="hljs-number">0xd5bc47</span>;
         jogo.physics.enable(anzolJ2, Phaser.Physics.ARCADE);
         anzolJ2.body.setSize(<span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">0</span>, <span class="hljs-number">16</span>);
         anzolJ2.body.gravity.setTo(<span class="hljs-number">0</span>, gravidade);
         anzolJ2.body.collideWorldBounds = <span class="hljs-literal">true</span>;
         anzolJ2.body.drag.setTo(arrasto, arrasto);
-        anzolJ2.body.maxVelocity.setTo(velocidadeMaxX, velocidadeMaxY);</pre></div>
+        anzolJ2.body.maxVelocity.setTo(velocidadeMaxX, velocidadeMaxY);</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Este é um objeto invisível, usado apenas para servir como um <em>trigger</em>, ou seja, um sensor para quando os anzóis tentam sair da água. Mais adiante, vamos usar esse objeto para limitar movimentos e para saber quando o pescador acabou de pegar um peixe.</p>
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>O objeto <code>topoAgua</code> é invisível, usado apenas para servir como um <em>trigger</em>, ou seja, um sensor para quando os anzóis tentam sair da água. Mais adiante, vamos usar esse objeto para limitar movimentos e para saber quando o pescador acabou de pegar um peixe.</p>
 
-        
-          <div class='highlight'><pre>        topoAgua = <span class="hljs-keyword">this</span>.add.sprite (<span class="hljs-number">0</span>, <span class="hljs-number">230</span>);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        topoAgua = <span class="hljs-keyword">this</span>.add.sprite (<span class="hljs-number">0</span>, <span class="hljs-number">230</span>);
         jogo.physics.enable(topoAgua, Phaser.Physics.ARCADE);
         topoAgua.body.setSize(<span class="hljs-number">400</span>, <span class="hljs-number">20</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
         topoAgua.body.gravity.setTo(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
-        topoAgua.body.immovable = <span class="hljs-literal">true</span>;</pre></div>
+        topoAgua.body.immovable = <span class="hljs-literal">true</span>;</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Zerando as pontuações.</p>
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Criação de um grupo para guardar os peixes</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        peixes = jogo.add.group();
+        peixes.physicsBodyType = Phaser.Physics.ARCADE;
+        peixes.enablePhysics = <span class="hljs-literal">true</span>;</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        scoreJ1 = scoreJ2 = <span class="hljs-number">0</span>;</pre></div>
         
-      
-        
-        <p>Cria um contexto de bitmap para desenhar linhas e adiciona ao jogo</p>
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Para criar peixes periodicamente, defini uma função <code>CriarPeixe</code>. Ela é chamada utilizando o sistema de <strong>eventos</strong> do Phaser, de forma que repita sempre, mas em intervalos de tempo regulares.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        jogo.time.events.loop (
+            Phaser.Timer.SECOND * intervaloPeixePequeno, 
+            CriarPeixe, <span class="hljs-keyword">this</span>, peixes, <span class="hljs-string">'peixe_pequeno'</span>, <span class="hljs-number">280</span>, <span class="hljs-number">500</span>);
+        jogo.time.events.loop (
+            Phaser.Timer.SECOND * intervaloPeixeMedio, 
+            CriarPeixe, <span class="hljs-keyword">this</span>, peixes, <span class="hljs-string">'peixe_medio'</span>, <span class="hljs-number">300</span>, <span class="hljs-number">580</span>);
+        jogo.time.events.loop (
+            Phaser.Timer.SECOND * intervaloPeixeGrande, 
+            CriarPeixe, <span class="hljs-keyword">this</span>, peixes, <span class="hljs-string">'peixe_grande'</span>, <span class="hljs-number">480</span>, <span class="hljs-number">580</span>);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.bitmap = <span class="hljs-keyword">this</span>.game.add.bitmapData(<span class="hljs-keyword">this</span>.game.width, <span class="hljs-keyword">this</span>.game.height);
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Zerando as pontuações.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        scoreJ1 = scoreJ2 = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Cria um contexto de bitmap para desenhar linhas e adiciona ao jogo</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.bitmap = <span class="hljs-keyword">this</span>.game.add.bitmapData(<span class="hljs-keyword">this</span>.game.width, <span class="hljs-keyword">this</span>.game.height);
         <span class="hljs-keyword">this</span>.bitmap.context.lineWidth = <span class="hljs-number">3</span>;
-        <span class="hljs-keyword">this</span>.game.add.image(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.bitmap);
-    }, <span class="hljs-comment">// fim: create</span></pre></div>
+        <span class="hljs-keyword">this</span>.game.add.image(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.bitmap);</pre></div></div>
+            
+        </li>
         
-      
         
-        <h4 id="update">Update</h4>
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Dois objetos de texto que serão usados para mostrar a pontuação de cada jogador.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        txtJ1 = jogo.add.text(<span class="hljs-number">20</span>, <span class="hljs-number">135</span>, <span class="hljs-string">"0 kg"</span>);
+        txtJ1.setStyle({font: <span class="hljs-string">'32px Homemade Apple'</span>, fill: <span class="hljs-string">'#ffffff'</span>, stroke: <span class="hljs-string">'#ffffff'</span>});
+        
+        txtJ2 = jogo.add.text(<span class="hljs-number">300</span>, <span class="hljs-number">135</span>, <span class="hljs-string">"0 kg"</span>);
+        txtJ2.setStyle({font: <span class="hljs-string">'32px Homemade Apple'</span>, fill: <span class="hljs-string">'#ffffff'</span>, stroke: <span class="hljs-string">'#ffffff'</span>});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Inicializando os diferentes sons</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        somPegou = jogo.add.audio(<span class="hljs-string">'pegou_peixe'</span>);
+        somFisgou = jogo.add.audio(<span class="hljs-string">'fisgou_peixe'</span>);
+        somTrombou = jogo.add.audio(<span class="hljs-string">'trombou'</span>);
+        
+    }, <span class="hljs-comment">// fim: create</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <h4 id="pescaria-update-">Pescaria.update()</h4>
 <p>Aqui definimos o fluxo do jogo a cada frame</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-        <span class="hljs-comment">/*jogo.debug.body(topoAgua);*/</span></pre></div>
         
-      
-        
-        <p>Tramaento de inputs e movimento. Mais detalhes na última seção.</p>
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Tratamento de inputs e movimento. Mais detalhes na última seção.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        TratarInput(controleJ1, anzolJ1);
+        TratarInput(controleJ2, anzolJ2);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        TratarInput(controleJ1, anzolJ1);
-        TratarInput(controleJ2, anzolJ2);</pre></div>
         
-      
-        
-        <p>Define colisões entre objetos e grupos de objetos</p>
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Define colisões entre objetos e grupos de objetos</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        jogo.physics.arcade.collide (anzolJ1, peixes, QuandoColidirPeixeAnzol);
+        jogo.physics.arcade.collide (anzolJ2, peixes, QuandoColidirPeixeAnzol);
+        jogo.physics.arcade.collide (anzolJ1, topoAgua, QuandoColidirAnzolTopo);
+        jogo.physics.arcade.collide (anzolJ2, topoAgua, QuandoColidirAnzolTopo);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        jogo.physics.arcade.collide(anzolJ1, topoAgua);
-        jogo.physics.arcade.collide(anzolJ2, topoAgua);
-    }, <span class="hljs-comment">// fim: update</span></pre></div>
         
-      
-        
-        <p>Na função <code>render</code> podemos desenhar coisas depois que a função <code>update</code> de todos os objetos foram chamadas. Isso é útil para garantir que as novas posições dos objetos já foram calculadas.</p>
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Depois de definidos os comportamentos mais recorrentes, é hora de criar instruções que controlam o fluxo de jogo a cada frame. Aqui, vamos ver se algum dos jogadores já alcançou 100kg de peixe. Se esse for o caso, vamos carregar o próximo estado do jogo.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (scoreJ1 &gt;= maxPeixes || scoreJ2 &gt;= maxPeixes) {
+            jogo.state.start(<span class="hljs-string">'MenuFinal'</span>, MenuFinal);
+        }
+    }, <span class="hljs-comment">// fim: update</span></pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div>
         
-      
-        
-        <p>Limpa o contexto de desenho de primitivas.</p>
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <h4 id="pescaria-render-">Pescaria.render()</h4>
+<p>Na função <code>render</code> podemos desenhar coisas depois que a função <code>update</code> de todos os objetos foram chamadas. Isso é útil para garantir que as novas posições dos objetos já foram calculadas.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        <span class="hljs-keyword">this</span>.bitmap.clear();
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Limpa o contexto de desenho de primitivas.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.bitmap.clear();
         DesenharLinha (<span class="hljs-keyword">this</span>.bitmap.context, <span class="hljs-string">'rgb(154, 85, 166)'</span>, <span class="hljs-number">184</span>, <span class="hljs-number">65</span>, anzolJ1.x + <span class="hljs-number">2</span>, anzolJ1.y + <span class="hljs-number">2</span> );
         DesenharLinha (<span class="hljs-keyword">this</span>.bitmap.context, <span class="hljs-string">'rgb(213, 188, 71)'</span>, <span class="hljs-number">216</span>, <span class="hljs-number">65</span>, anzolJ2.x + <span class="hljs-number">2</span>, anzolJ2.y + <span class="hljs-number">2</span>);
     } <span class="hljs-comment">// fim: render</span>
-}</pre></div>
+}
+
+<span class="hljs-keyword">var</span> MenuFinal = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(jogo)</span> </span>{};
+MenuFinal.prototype = {</pre></div></div>
+            
+        </li>
         
-      
         
-        <h2 id="rodando-estados">Rodando estados</h2>
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <h4 id="menufinal-create-">MenuFinal.create()</h4>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    create : <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Carregamos imagens parecidas com a do primeiro menu, com a diferença que apenas carregamos a imagem se o jogador conseguiu mais de 100kg de peixe.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'fundo_papel'</span>);
+        <span class="hljs-keyword">var</span> agua1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
+        agua1.blendMode = PIXI.blendModes.MULTIPLY;
+        <span class="hljs-keyword">if</span> (scoreJ1 &gt;= maxPeixes) {
+            imgJ1 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'J1'</span>);
+            imgJ1.blendMode = PIXI.blendModes.MULTIPLY;
+        }
+        <span class="hljs-keyword">if</span> (scoreJ2 &gt;= maxPeixes) {
+            imgJ2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'J2'</span>);
+            imgJ2.blendMode = PIXI.blendModes.MULTIPLY;
+        }
+        <span class="hljs-keyword">var</span> agua2 = <span class="hljs-keyword">this</span>.add.sprite(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">'agua'</span>);
+        agua2.blendMode = PIXI.blendModes.MULTIPLY;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Aqui vai a mensagem final</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        CriarTexto (<span class="hljs-string">'a pescaria'</span>, <span class="hljs-string">'aqui só fica quem produz!\n      [enter + espaço]'</span>);
+    
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <h4 id="menufinal-update-">MenuFinal.update()</h4>
+<p>Durante a função <code>update</code>, vamos apenas checar se alguma das teclas de ação foi pressionada, para então trocar para o <code>MenuInicial</code> novamente.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (controleJ1.acao.isDown &amp;&amp; controleJ2.acao.isDown) {
+            jogo.state.start(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);
+        }
+    } <span class="hljs-comment">// fim: update</span>
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <h2 id="rodando-estados">Rodando estados</h2>
 <p>Agora que criamos alguns estados, podemos dar chaves para eles (<code>state.add</code>) e escolher um para executar (<code>state.start</code>).</p>
 
-        
-          <div class='highlight'><pre>jogo.state.add(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>jogo.state.add(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);
 jogo.state.add(<span class="hljs-string">'Pescaria'</span>, Pescaria);
-jogo.state.start(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);</pre></div>
+jogo.state.add(<span class="hljs-string">'MenuFinal'</span>, MenuFinal);
+jogo.state.start(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);</pre></div></div>
+            
+        </li>
         
-      
         
-        <h2 id="fun-es">Funções</h2>
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <h2 id="fun-es">Funções</h2>
 <p>Aqui estão funções utilizadas em outros pontos do código. O objetivo de definir essas funções em separado é poder reutilizá-las sem maiores esforços e repetições.</p>
 
+            </div>
+            
+        </li>
         
-      
         
-        <h3 id="desenhar-linha">Desenhar Linha</h3>
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <h3 id="desenhar-linha">Desenhar Linha</h3>
 <p>Desenha a linha de um jogador, criando um desenho vetorial (<em>path</em>) diretamente no elemento canvas.</p>
 
-        
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DesenharLinha</span> <span class="hljs-params">(contexto, cor, origemX, origemY, fimX, fimY)</span> </span>{
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DesenharLinha</span> <span class="hljs-params">(contexto, cor, origemX, origemY, fimX, fimY)</span> </span>{
     contexto.beginPath();
     contexto.strokeStyle = cor;
     contexto.moveTo(origemX, origemY);
     contexto.lineTo(fimX, fimY);
     contexto.stroke();
     contexto.closePath();
-} <span class="hljs-comment">// fim: DesenharLinha</span></pre></div>
+} <span class="hljs-comment">// fim: DesenharLinha</span></pre></div></div>
+            
+        </li>
         
-      
         
-        <h3 id="tratar-input">Tratar Input</h3>
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <h3 id="tratar-input">Tratar Input</h3>
 <p>Checa as diferentes possibilidades de input de um jogador e altera o movimento do respectivo anzol.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">TratarInput</span> <span class="hljs-params">(jogador, anzol)</span> </span>{</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">TratarInput</span> <span class="hljs-params">(jogador, anzol)</span> </span>{</pre></div>
         
-      
-        
-        <p>A cada frame, zera a aceleração e depois cria novos valores de acordo com as teclas apertadas.</p>
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>A cada frame, zera a aceleração e depois cria novos valores de acordo com as teclas apertadas.</p>
 
-        
-          <div class='highlight'><pre>    anzol.body.acceleration.setTo (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    anzol.body.acceleration.setTo (<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);
     <span class="hljs-keyword">if</span>(jogador.cima.isDown){
         anzol.body.acceleration.y = -velocidadeAnzolY;
     }
@@ -366,22 +899,207 @@ jogo.state.start(<span class="hljs-string">'MenuInicial'</span>, MenuInicial);</
     }
     <span class="hljs-keyword">if</span>(jogador.direita.isDown){
         anzol.body.acceleration.x = velocidadeAnzolX;
-    }</pre></div>
+    }</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Caso a tecla de ação estiver apertada e o jogador estiver movendo-se para cima, deixamos ele subir mais rápido.</p>
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Caso a tecla de ação estiver apertada e o jogador estiver movendo-se para cima, deixamos ele subir mais rápido.</p>
 
-        
-          <div class='highlight'><pre>    anzol.body.maxVelocity.y = velocidadeMaxY;
-    <span class="hljs-keyword">if</span>(jogador.acao.isDown &amp;&amp; anzol.body.velocity.y &lt; <span class="hljs-number">0</span>){
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    anzol.body.maxVelocity.y = velocidadeMaxY;
+    <span class="hljs-keyword">if</span>(jogador.acao.isDown){
         anzol.body.maxVelocity.y = velocidadeMaxY * <span class="hljs-number">4</span>;
+        anzol.body.acceleration.y = -velocidadeAnzolY * <span class="hljs-number">4</span>;
     }
-} <span class="hljs-comment">// fim: TratarInput</span></pre></div>
+} <span class="hljs-comment">// fim: TratarInput</span></pre></div></div>
+            
+        </li>
         
-      
-      <div class="fleur">h</div>
-    </div>
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <h3 id="quandocolidirpeixeanzol">QuandoColidirPeixeAnzol</h3>
+<p>Processa o momento em que o anzol pega um peixe.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">QuandoColidirPeixeAnzol</span> <span class="hljs-params">(anzol, peixe)</span> </span>{
+    <span class="hljs-keyword">if</span> (anzol.children.length == <span class="hljs-number">0</span>) {
+        peixe.tint = (anzol == anzolJ1) ? corJ1 : corJ2;
+        peixe.body.velocity.setTo(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);
+        peixe.body.enable = <span class="hljs-literal">false</span>;
+        anzol.addChild (peixe);
+        peixe.x = <span class="hljs-number">0</span>;
+        peixe.y = <span class="hljs-number">15</span>;
+        <span class="hljs-keyword">if</span> (!somFisgou.isPlaying) somFisgou.play();
+    }
+    <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">if</span> (!somTrombou.isPlaying) somTrombou.play();
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <h3 id="quandocolidiranzoltopo">QuandoColidirAnzolTopo</h3>
+<p>Processa o momento em que o anzol está com um peixe e encosta no topo da água.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">QuandoColidirAnzolTopo</span> <span class="hljs-params">(anzol, topo)</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"tocou topo"</span>);
+    <span class="hljs-keyword">if</span> (anzol.children.length &gt; <span class="hljs-number">0</span>) {
+        p = anzol.children[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">if</span> (anzol == anzolJ1) {
+            scoreJ1 += p.health;
+        }
+        <span class="hljs-keyword">else</span> {
+            scoreJ2 += p.health;
+        }
+        anzol.removeChild(p);
+        p.destroy();
+        txtJ1.text = scoreJ1 + <span class="hljs-string">' kg'</span>;
+        txtJ2.text = scoreJ2 + <span class="hljs-string">' kg'</span>;
+        <span class="hljs-keyword">if</span> (!somPegou.isPlaying) somPegou.play();
+    } 
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <h3 id="criarpeixe">CriarPeixe</h3>
+<p>Cria e adiciona peixes ao grupos.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CriarPeixe</span> <span class="hljs-params">(grupo, tipo, minY, maxY)</span> </span>{
+
+    grupo.forEach (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(p)</span> </span>{
+        <span class="hljs-keyword">if</span> (p.inWorld) {
+            p.outOfBoundsKill = <span class="hljs-literal">true</span>;
+        }
+    });
+    
+    <span class="hljs-keyword">var</span> lixo = grupo.getFirstDead();
+    <span class="hljs-keyword">if</span> (lixo != <span class="hljs-literal">null</span>) {
+        grupo.remove(lixo, <span class="hljs-literal">true</span>);
+    }
+
+    <span class="hljs-keyword">var</span> peixe = grupo.create (<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, tipo);
+    peixe.x = (grupo.game.rnd.between(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>) &gt; <span class="hljs-number">0.5</span>)? <span class="hljs-number">450</span> : -<span class="hljs-number">50</span>;
+    peixe.y = grupo.game.rnd.between(minY, maxY);
+    peixe.checkWorldBounds = <span class="hljs-literal">true</span>;
+    grupo.game.physics.enable(peixe, Phaser.Physics.ARCADE);
+    <span class="hljs-keyword">if</span> (peixe.x &lt; <span class="hljs-number">0</span>) {
+        peixe.body.velocity.x = velPeixe * grupo.game.rnd.between(<span class="hljs-number">1</span>, <span class="hljs-number">1.5</span>);
+        peixe.scale.x = -<span class="hljs-number">1</span>;
+    }
+    <span class="hljs-keyword">else</span> {
+        peixe.body.velocity.x = -velPeixe * grupo.game.rnd.between(<span class="hljs-number">1</span>, <span class="hljs-number">1.5</span>);
+        peixe.scale.x = <span class="hljs-number">1</span>;
+    } 
+    peixe.body.immovable = <span class="hljs-literal">true</span>;
+    peixe.anchor.setTo(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>Para definir o peso de cada peixe, vamos usar a sua saúde. Quando ele for pego, esse valor será somado aos pontos do jogador que o pegou.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">switch</span>(tipo) {
+        <span class="hljs-keyword">case</span> <span class="hljs-string">'peixe_pequeno'</span> : peixe.health = <span class="hljs-number">3</span>; <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> <span class="hljs-string">'peixe_medio'</span> : peixe.health = <span class="hljs-number">8</span>; <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> <span class="hljs-string">'peixe_grande'</span> : peixe.health = <span class="hljs-number">20</span>; <span class="hljs-keyword">break</span>;
+    }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <h3 id="criartexto">CriarTexto</h3>
+<p>Função que cria textos com duas partes: um título e uma série de instruções.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">CriarTexto</span> <span class="hljs-params">(msg1, msg2)</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"texto"</span>);
+    <span class="hljs-keyword">var</span> txtTitulo = jogo.add.text(jogo.world.centerX, jogo.world.centerY, msg1);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>Queremos o texto centralizado e em branco.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    txtTitulo.anchor.setTo(<span class="hljs-number">0.5</span>);
+    txtTitulo.setStyle({font: <span class="hljs-string">'64px Homemade Apple'</span>, fill: <span class="hljs-string">'#ffffff'</span>, stroke: <span class="hljs-string">'#ffffff'</span>});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>Criamos mais um objeto para as instruções iniciais.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> txtInstrucoes = jogo.add.text(jogo.world.centerX, jogo.world.centerY+<span class="hljs-number">100</span>, msg2);
+    txtInstrucoes.anchor.setTo(<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>);
+    txtInstrucoes.setStyle({font: <span class="hljs-string">'22px Homemade Apple'</span>, fill: <span class="hljs-string">'#888888'</span>, stroke: <span class="hljs-string">'#ffffff'</span>});
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
   </div>
 </body>
 </html>
